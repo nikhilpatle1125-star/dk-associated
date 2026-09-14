@@ -1,19 +1,21 @@
 -- CreateTable
 CREATE TABLE "Admin" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL
+    "password" TEXT NOT NULL,
+
+    CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Property" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "type" TEXT NOT NULL,
-    "price" REAL NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
     "priceLabel" TEXT,
-    "area" REAL NOT NULL,
+    "area" DOUBLE PRECISION NOT NULL,
     "areaUnit" TEXT NOT NULL DEFAULT 'sq.ft.',
     "status" TEXT NOT NULL DEFAULT 'AVAILABLE',
     "description" TEXT NOT NULL DEFAULT '',
@@ -33,13 +35,15 @@ CREATE TABLE "Property" (
     "furnishing" TEXT,
     "parking" BOOLEAN NOT NULL DEFAULT false,
     "featured" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Property_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "SiteSettings" (
-    "id" TEXT NOT NULL PRIMARY KEY DEFAULT 'singleton',
+    "id" TEXT NOT NULL DEFAULT 'singleton',
     "companyName" TEXT NOT NULL DEFAULT 'DK Associated',
     "tagline" TEXT NOT NULL DEFAULT 'Trusted plots & flats, built on transparency.',
     "email" TEXT NOT NULL DEFAULT '',
@@ -51,18 +55,22 @@ CREATE TABLE "SiteSettings" (
     "logoUrl" TEXT,
     "heroImageUrl" TEXT,
     "facebookUrl" TEXT,
-    "instagramUrl" TEXT
+    "instagramUrl" TEXT,
+
+    CONSTRAINT "SiteSettings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ContactMessage" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "email" TEXT,
     "message" TEXT NOT NULL,
     "propertyId" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ContactMessage_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
