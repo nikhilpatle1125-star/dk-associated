@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // SQLite for local dev. Switch to "postgresql" for Vercel (see README).
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String
+}
+
+model Property {
+  id             String   @id @default(cuid())
+  title          String
+  slug           String   @unique
+  type           String   // "PLOT" or "FLAT"
+  price          Float
+  priceLabel     String?  // e.g. "Negotiable", "All Inclusive" - optional override text
+  area           Float
+  areaUnit       String   @default("sq.ft.")
+  status         String   @default("AVAILABLE") // AVAILABLE, SOLD, ON_HOLD, BOOKED
+  description    String   @default("")
+  address        String   @default("")
+  city           String   @default("")
+  mapLink        String?
+  photos         String   @default("[]") // JSON array of URLs
+  layoutMapUrl   String?
+  brochureUrl    String?
+
+  // Plot-specific fields (used when type = PLOT)
+  plotDimensions String?
+  facing         String?
+  cornerPlot     Boolean  @default(false)
+  boundaryWall   Boolean  @default(false)
+
+  // Flat-specific fields (used when type = FLAT)
+  bhk            String?
+  floor          String?
+  totalFloors    Int?
+  furnishing     String?
+  parking        Boolean  @default(false)
+
+  featured       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model SiteSettings {
+  id           String  @id @default("singleton")
+  companyName  String  @default("DK Associated")
+  tagline      String  @default("Trusted plots & flats, built on transparency.")
+  email        String  @default("")
+  whatsapp     String  @default("")
+  phone        String  @default("")
+  address      String  @default("")
+  mapLink      String  @default("")
+  aboutText    String  @default("")
+  logoUrl      String?
+  heroImageUrl String?
+  facebookUrl  String?
+  instagramUrl String?
+}
+
+model ContactMessage {
+  id         String   @id @default(cuid())
+  name       String
+  phone      String
+  email      String?
+  message    String
+  propertyId String?
+  createdAt  DateTime @default(now())
+}

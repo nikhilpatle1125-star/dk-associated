@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #f2f4f0;
+  --ink: #1b2420;
+  --forest: #123524;
+  --forest-light: #1d5138;
+  --clay: #b98b3e;
+  --clay-light: #d3ab63;
+  --line: #d8ddd4;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.font-display {
+  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", "URW Palladio L", Georgia, serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--clay);
+  outline-offset: 2px;
+}
+
+.container-page {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--forest);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2px;
+  font-weight: 500;
+  transition: background-color 150ms ease;
+}
+.btn-primary:hover {
+  background-color: var(--forest-light);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--forest);
+  color: var(--forest);
+  padding: 0.75rem 1.5rem;
+  border-radius: 2px;
+  font-weight: 500;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.btn-outline:hover {
+  background-color: var(--forest);
+  color: #fff;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 2px;
+  font-weight: 600;
+}
+.badge-available { background: #e4efe6; color: #1d5138; }
+.badge-sold { background: #f0e4e4; color: #8a3b3b; }
+.badge-hold { background: #f0ebda; color: #8a6d1d; }
+.badge-booked { background: #e3e7f0; color: #35478a; }
