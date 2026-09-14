@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '../../../lib/prisma';
+import { put } from '@vercel/blob';
 
 export async function GET() {
   try {
-    const count = await prisma.admin.count();
-    return NextResponse.json({ ok: true, adminCount: count });
+    const blob = await put('debug-test.txt', 'hello world', { access: 'public', addRandomSuffix: true });
+    return NextResponse.json({ ok: true, url: blob.url });
   } catch (err) {
     return NextResponse.json({ ok: false, error: String(err.message || err) }, { status: 500 });
   }
