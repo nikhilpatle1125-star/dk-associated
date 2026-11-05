@@ -16,6 +16,7 @@ const emptyProperty = {
   address: '',
   city: '',
   mapLink: '',
+  virtualTourUrl: '',
   photos: [],
   layoutMapUrl: null,
   brochureUrl: null,
@@ -131,6 +132,12 @@ export default function PropertyForm({ initial, propertyId }) {
         </Field>
         <Field label="Google Maps link (optional)">
           <input value={form.mapLink || ''} onChange={(e) => set('mapLink', e.target.value)} className="input" placeholder="https://maps.google.com/..." />
+        </Field>
+      </Section>
+
+      <Section title="Virtual tour (optional)">
+        <Field label="360° tour / video walkthrough link">
+          <input value={form.virtualTourUrl || ''} onChange={(e) => set('virtualTourUrl', e.target.value)} className="input" placeholder="https://youtube.com/..." />
         </Field>
       </Section>
 

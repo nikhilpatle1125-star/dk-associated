@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '../../../lib/prisma';
+import PropertyGallery from '../../../components/PropertyGallery';
 import { formatPrice, parsePhotos, whatsappLink } from '../../../lib/utils';
 
 export const revalidate = 0;
@@ -48,20 +49,7 @@ export default async function PropertyDetailPage({ params }) {
       <div className="grid lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2">
           {photos.length > 0 ? (
-            <div className="grid gap-2">
-              <div className="aspect-[16/10] bg-[var(--line)] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photos[0]} alt={property.title} className="h-full w-full object-cover" />
-              </div>
-              {photos.length > 1 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {photos.slice(1, 5).map((src, i) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img key={i} src={src} alt={`${property.title} photo ${i + 2}`} className="aspect-square object-cover w-full" />
-                  ))}
-                </div>
-              )}
-            </div>
+            <PropertyGallery photos={photos} title={property.title} />
           ) : (
             <div className="aspect-[16/10] bg-[var(--line)] flex items-center justify-center text-[var(--ink)]/40">
               No photos yet
@@ -96,11 +84,21 @@ export default async function PropertyDetailPage({ params }) {
             )}
           </div>
 
-          {(property.layoutMapUrl || property.brochureUrl) && (
+          {(property.layoutMapUrl || property.brochureUrl || property.virtualTourUrl || property.mapLink) && (
             <div className="mt-8 flex flex-wrap gap-4">
               {property.layoutMapUrl && (
                 <a href={property.layoutMapUrl} target="_blank" rel="noopener noreferrer" className="btn-outline focus-ring">
                   View layout map
+                </a>
+              )}
+              {property.virtualTourUrl && (
+                <a href={property.virtualTourUrl} target="_blank" rel="noopener noreferrer" className="btn-outline focus-ring">
+                  Virtual tour
+                </a>
+              )}
+              {property.mapLink && (
+                <a href={property.mapLink} target="_blank" rel="noopener noreferrer" className="btn-outline focus-ring">
+                  View on map
                 </a>
               )}
               {property.brochureUrl && (

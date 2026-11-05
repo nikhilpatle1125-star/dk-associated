@@ -3,7 +3,6 @@ generator client {
 }
 
 datasource db {
-  // SQLite for local dev. Switch to "postgresql" for Vercel (see README).
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
@@ -20,7 +19,7 @@ model Property {
   slug           String   @unique
   type           String   // "PLOT" or "FLAT"
   price          Float
-  priceLabel     String?  // e.g. "Negotiable", "All Inclusive" - optional override text
+  priceLabel     String?  // e.g. "Negotiable", "All Inclusive"
   area           Float
   areaUnit       String   @default("sq.ft.")
   status         String   @default("AVAILABLE") // AVAILABLE, SOLD, ON_HOLD, BOOKED
@@ -31,14 +30,15 @@ model Property {
   photos         String   @default("[]") // JSON array of URLs
   layoutMapUrl   String?
   brochureUrl    String?
+  virtualTourUrl String?  // New: 360 tour / video walkthrough link
 
-  // Plot-specific fields (used when type = PLOT)
+  // Plot-specific fields
   plotDimensions String?
   facing         String?
   cornerPlot     Boolean  @default(false)
   boundaryWall   Boolean  @default(false)
 
-  // Flat-specific fields (used when type = FLAT)
+  // Flat-specific fields
   bhk            String?
   floor          String?
   totalFloors    Int?
@@ -64,6 +64,13 @@ model SiteSettings {
   heroImageUrl String?
   facebookUrl  String?
   instagramUrl String?
+  youtubeUrl   String?
+
+  // New client-attracting metrics / highlights
+  yearsExperience String @default("15+")
+  happyClients    String @default("1,200+")
+  verifiedProperties String @default("100%")
+  expertSupport   String @default("24/7 Guidance")
 }
 
 model ContactMessage {
@@ -74,4 +81,15 @@ model ContactMessage {
   message    String
   propertyId String?
   createdAt  DateTime @default(now())
+}
+
+model Slide {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  title     String   @default("")
+  subtitle  String   @default("")
+  linkUrl   String?
+  sortOrder Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
 }

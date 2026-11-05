@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
 
+const recent = new Map(); // best-effort throttle (per serverless instance)
+
 export async function POST(request) {
   const body = await request.json().catch(() => null);
+
+  // Honeypot: real users never fill this hidden field; bots do. Pretend success.
+  if (body?.website) return NextResponse.json({ ok: true });
+
+  const ip = (request.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim();
+  const now = Date.now();
+  const hits = (recent.get(ip) || []).filter((t) => now - t < 10 * 60 * 1000);
+  if (hits.length >= 5) {
+    return NextResponse.json({ error: 'Too many messages. Please try again later.' }, { status: 429 });
+  }
+  hits.push(now);
+  recent.set(ip, hits);
 
   if (!body?.name || !body?.phone || !body?.message) {
     return NextResponse.json({ error: 'Name, phone and message are required.' }, { status: 400 });

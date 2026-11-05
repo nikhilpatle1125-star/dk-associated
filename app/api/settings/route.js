@@ -2,6 +2,17 @@ import { NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
 import { requireAdmin } from '../../../lib/apiAuth';
 
+function cleanUrl(v) {
+  if (!v) return null;
+  const t = String(v).trim().slice(0, 500);
+  return /^https?:\/\//i.test(t) ? t : null;
+}
+
+function cleanText(v, fallback, max) {
+  const t = v === undefined || v === null ? '' : String(v).trim();
+  return (t || fallback).slice(0, max);
+}
+
 export async function GET() {
   const { response } = await requireAdmin();
   if (response) return response;
@@ -28,8 +39,13 @@ export async function PUT(request) {
     aboutText: String(body.aboutText || '').slice(0, 5000),
     logoUrl: body.logoUrl || null,
     heroImageUrl: body.heroImageUrl || null,
-    facebookUrl: body.facebookUrl || null,
-    instagramUrl: body.instagramUrl || null
+    facebookUrl: cleanUrl(body.facebookUrl),
+    instagramUrl: cleanUrl(body.instagramUrl),
+    youtubeUrl: cleanUrl(body.youtubeUrl),
+    yearsExperience: cleanText(body.yearsExperience, '15+', 40),
+    happyClients: cleanText(body.happyClients, '1,200+', 40),
+    verifiedProperties: cleanText(body.verifiedProperties, '100%', 40),
+    expertSupport: cleanText(body.expertSupport, '24/7 Guidance', 60)
   };
 
   const updated = await prisma.siteSettings.upsert({

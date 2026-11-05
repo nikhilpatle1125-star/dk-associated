@@ -1,18 +1,21 @@
 import Link from 'next/link';
 import { prisma } from '../lib/prisma';
 import PropertyCard from '../components/PropertyCard';
+import HeroSlideshow from '../components/HeroSlideshow';
+import SocialButtons from '../components/SocialButtons';
 
 export const revalidate = 0;
 
 async function getData() {
-  const [settings, featured, availableCount] = await Promise.all([
+  const [settings, featured, availableCount, slides] = await Promise.all([
     prisma.siteSettings.findUnique({ where: { id: 'singleton' } }).catch(() => null),
     prisma.property.findMany({
       where: { featured: true },
       orderBy: { createdAt: 'desc' },
       take: 6
     }).catch(() => []),
-    prisma.property.count({ where: { status: 'AVAILABLE' } }).catch(() => 0)
+    prisma.property.count({ where: { status: 'AVAILABLE' } }).catch(() => 0),
+    prisma.slide.findMany({ where: { active: true }, orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }] }).catch(() => [])
   ]);
 
   let properties = featured;
@@ -23,48 +26,79 @@ async function getData() {
     }).catch(() => []);
   }
 
-  return { settings, properties, availableCount };
+  return { settings, properties, availableCount, slides };
 }
 
 export default async function HomePage() {
-  const { settings, properties, availableCount } = await getData();
+  const { settings, properties, availableCount, slides } = await getData();
+
+  const heroContent = (
+    <div className="container-page py-24 md:py-32 text-white">
+      <p className="uppercase tracking-wide text-sm text-[var(--clay-light)] font-semibold mb-4">
+        {settings?.address || 'Property advisory'}
+      </p>
+      <h1 className="font-display text-4xl md:text-6xl leading-tight max-w-2xl">
+        {settings?.tagline || 'Trusted plots & flats, built on transparency.'}
+      </h1>
+      <p className="mt-6 max-w-xl text-white/85">
+        {settings?.aboutText
+          ? settings.aboutText.slice(0, 220)
+          : 'Browse verified plots and flats, backed by clear documentation and a team that answers.'}
+      </p>
+      <div className="mt-9 flex flex-wrap gap-4">
+        <Link href="/properties" className="btn-primary focus-ring">
+          View properties
+        </Link>
+        <Link href="/contact" className="inline-flex items-center gap-2 border border-white/50 text-white px-6 py-3 rounded-sm hover:bg-white/10 transition-colors focus-ring">
+          Talk to us
+        </Link>
+      </div>
+      <SocialButtons settings={settings} className="mt-6" />
+    </div>
+  );
 
   return (
     <div>
-      <section
-        className="relative border-b border-[var(--line)]"
-        style={
-          settings?.heroImageUrl
-            ? {
-                backgroundImage: `linear-gradient(180deg, rgba(18,53,36,0.72), rgba(18,53,36,0.85)), url(${settings.heroImageUrl})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }
-            : { backgroundColor: 'var(--forest)' }
-        }
-      >
-        <div className="container-page py-24 md:py-32 text-white">
-          <p className="uppercase tracking-wide text-sm text-[var(--clay-light)] font-semibold mb-4">
-            {settings?.address || 'Property advisory'}
-          </p>
-          <h1 className="font-display text-4xl md:text-6xl leading-tight max-w-2xl">
-            {settings?.tagline || 'Trusted plots & flats, built on transparency.'}
-          </h1>
-          <p className="mt-6 max-w-xl text-white/85">
-            {settings?.aboutText
-              ? settings.aboutText.slice(0, 220)
-              : 'Browse verified plots and flats, backed by clear documentation and a team that answers.'}
-          </p>
-          <div className="mt-9 flex flex-wrap gap-4">
-            <Link href="/properties" className="btn-primary focus-ring">
-              View properties
-            </Link>
-            <Link href="/contact" className="inline-flex items-center gap-2 border border-white/50 text-white px-6 py-3 rounded-sm hover:bg-white/10 transition-colors focus-ring">
-              Talk to us
-            </Link>
+      {slides.length > 0 ? (
+        <HeroSlideshow slides={slides.map((x) => ({ id: x.id, imageUrl: x.imageUrl, title: x.title, subtitle: x.subtitle, linkUrl: x.linkUrl }))}>
+          {heroContent}
+        </HeroSlideshow>
+      ) : (
+        <section
+          className="relative border-b border-[var(--line)]"
+          style={
+            settings?.heroImageUrl
+              ? {
+                  backgroundImage: `linear-gradient(180deg, rgba(18,53,36,0.72), rgba(18,53,36,0.85)), url(${settings.heroImageUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }
+              : { backgroundColor: 'var(--forest)' }
+          }
+        >
+          {heroContent}
+        </section>
+      )}
+
+      {settings && (
+        <section className="bg-white border-b border-[var(--line)]">
+          <div className="container-page py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { value: settings.yearsExperience, label: 'Years of experience' },
+              { value: settings.happyClients, label: 'Happy clients' },
+              { value: settings.verifiedProperties, label: 'Verified properties' },
+              { value: settings.expertSupport, label: 'Expert support' }
+            ]
+              .filter((x) => x.value)
+              .map((x) => (
+                <div key={x.label}>
+                  <div className="font-display text-2xl md:text-3xl text-[var(--forest)]">{x.value}</div>
+                  <div className="text-xs md:text-sm text-[var(--ink)]/60 mt-1">{x.label}</div>
+                </div>
+              ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="container-page py-16 md:py-24">
         <div className="flex items-end justify-between mb-10 flex-wrap gap-4">

@@ -28,7 +28,11 @@ async function main() {
       phone: '',
       address: '',
       mapLink: '',
-      aboutText: 'Tell your clients about DK Associated here. Edit this from the admin dashboard.'
+      aboutText: 'Tell your clients about DK Associated here. Edit this from the admin dashboard.',
+      yearsExperience: '15+',
+      happyClients: '1,200+',
+      verifiedProperties: '100%',
+      expertSupport: '24/7 Guidance'
     }
   });
   console.log('Site settings row ready (edit values from /admin/settings).');

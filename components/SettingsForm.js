@@ -86,12 +86,32 @@ export default function SettingsForm({ initial }) {
         />
       </Section>
 
+      <Section title="Highlights shown on the homepage">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Field label="Years of experience" hint="e.g. 15+">
+            <input value={form.yearsExperience || ''} onChange={(e) => set('yearsExperience', e.target.value)} className="input" />
+          </Field>
+          <Field label="Happy clients" hint="e.g. 1,200+">
+            <input value={form.happyClients || ''} onChange={(e) => set('happyClients', e.target.value)} className="input" />
+          </Field>
+          <Field label="Verified properties" hint="e.g. 100%">
+            <input value={form.verifiedProperties || ''} onChange={(e) => set('verifiedProperties', e.target.value)} className="input" />
+          </Field>
+          <Field label="Support" hint="e.g. 24/7 Guidance">
+            <input value={form.expertSupport || ''} onChange={(e) => set('expertSupport', e.target.value)} className="input" />
+          </Field>
+        </div>
+      </Section>
+
       <Section title="Social links (optional)">
         <Field label="Facebook URL">
           <input value={form.facebookUrl || ''} onChange={(e) => set('facebookUrl', e.target.value)} className="input" />
         </Field>
         <Field label="Instagram URL">
-          <input value={form.instagramUrl || ''} onChange={(e) => set('instagramUrl', e.target.value)} className="input" />
+          <input value={form.instagramUrl || ''} onChange={(e) => set('instagramUrl', e.target.value)} className="input" placeholder="https://instagram.com/yourpage" />
+        </Field>
+        <Field label="YouTube URL">
+          <input value={form.youtubeUrl || ''} onChange={(e) => set('youtubeUrl', e.target.value)} className="input" placeholder="https://youtube.com/@yourchannel" />
         </Field>
       </Section>
 

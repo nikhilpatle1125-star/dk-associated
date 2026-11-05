@@ -7,6 +7,7 @@ export default function ContactForm({ prefillProperty }) {
     name: '',
     phone: '',
     email: '',
+    website: '',
     message: prefillProperty ? `Hi, I'm interested in "${prefillProperty}".` : ''
   });
   const [status, setStatus] = useState('idle'); // idle | sending | sent | error
@@ -26,7 +27,7 @@ export default function ContactForm({ prefillProperty }) {
       });
       if (!res.ok) throw new Error('failed');
       setStatus('sent');
-      setForm({ name: '', phone: '', email: '', message: '' });
+      setForm({ name: '', phone: '', email: '', website: '', message: '' });
     } catch {
       setStatus('error');
     }
@@ -43,6 +44,16 @@ export default function ContactForm({ prefillProperty }) {
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 bg-white border border-[var(--line)] p-6">
+      <input
+        type="text"
+        name="website"
+        value={form.website}
+        onChange={update('website')}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+      />
       <Field label="Name" required>
         <input
           required

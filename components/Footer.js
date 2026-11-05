@@ -25,6 +25,15 @@ export default function Footer({ settings }) {
           <div><Link href="/properties" className="hover:underline focus-ring">All properties</Link></div>
           <div><Link href="/about" className="hover:underline focus-ring">About us</Link></div>
           <div><Link href="/contact" className="hover:underline focus-ring">Get in touch</Link></div>
+          {settings?.facebookUrl && (
+            <div><a href={settings.facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:underline focus-ring">Facebook</a></div>
+          )}
+          {settings?.instagramUrl && (
+            <div><a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:underline focus-ring">Instagram</a></div>
+          )}
+          {settings?.youtubeUrl && (
+            <div><a href={settings.youtubeUrl} target="_blank" rel="noopener noreferrer" className="hover:underline focus-ring">YouTube</a></div>
+          )}
         </div>
       </div>
       <div className="border-t border-white/15 py-5 text-center text-xs text-white/60">
