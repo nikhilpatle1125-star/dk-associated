@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
 import Providers from '../components/Providers';
+import ScrollProgress from '../components/ScrollProgress';
 import { prisma } from '../lib/prisma';
 
 async function getSettings() {
@@ -32,7 +33,16 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        />
+      </head>
       <body>
+        <ScrollProgress />
         <Providers>
           <Navbar settings={settings} />
           <main className="min-h-[60vh]">{children}</main>

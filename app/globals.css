@@ -10,6 +10,8 @@
   --clay: #b98b3e;
   --clay-light: #d3ab63;
   --line: #d8ddd4;
+  --font-display: "Playfair Display", ui-serif, "Iowan Old Style", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 html {
@@ -19,11 +21,13 @@ html {
 body {
   background-color: var(--paper);
   color: var(--ink);
-  font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
 
 .font-display {
-  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", "URW Palladio L", Georgia, serif;
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -91,3 +95,111 @@ body {
 .badge-sold { background: #f0e4e4; color: #8a3b3b; }
 .badge-hold { background: #f0ebda; color: #8a6d1d; }
 .badge-booked { background: #e3e7f0; color: #35478a; }
+
+/* ---------- Animations ---------- */
+.reveal-pre {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal-pre.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-up { animation: fade-up 0.8s ease both; }
+.fade-up-2 { animation: fade-up 0.8s ease 0.15s both; }
+.fade-up-3 { animation: fade-up 0.8s ease 0.3s both; }
+.fade-up-4 { animation: fade-up 0.8s ease 0.45s both; }
+
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+.kenburns { animation: kenburns 4s ease-out both; }
+
+@keyframes wa-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(29, 81, 56, 0.55); }
+  70% { box-shadow: 0 0 0 16px rgba(29, 81, 56, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(29, 81, 56, 0); }
+}
+.wa-pulse { animation: wa-pulse 2.4s infinite; }
+
+.card-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(18, 53, 36, 0.12);
+}
+
+.btn-primary, .btn-outline {
+  transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+.btn-primary:hover, .btn-outline:hover { transform: translateY(-1px); }
+
+details > summary::-webkit-details-marker { display: none; }
+
+/* ---------- Animation set 2 ---------- */
+.reveal-pre.rv-left { transform: translateX(-48px); }
+.reveal-pre.rv-right { transform: translateX(48px); }
+.reveal-pre.rv-zoom { transform: scale(0.92); }
+.reveal-pre.reveal-in { opacity: 1; transform: none; }
+
+@keyframes word-rise {
+  from { transform: translateY(110%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.word-rise { animation: word-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track { display: flex; width: max-content; animation: marquee 45s linear infinite; }
+.marquee-track.fast { animation-duration: 28s; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+.nav-link { position: relative; padding: 0.25rem 0; }
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -2px;
+  height: 2px; width: 100%;
+  background: var(--clay);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.nav-link:hover::after { transform: scaleX(1); }
+
+.heading-line { position: relative; padding-bottom: 0.9rem; }
+.heading-line::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 3px; width: 56px;
+  background: var(--clay);
+}
+
+.arrow-link span { display: inline-block; transition: transform 0.25s ease; }
+.arrow-link:hover span { transform: translateX(5px); }
+
+.parallax-bg { background-attachment: fixed; background-size: cover; background-position: center; }
+@media (max-width: 768px) { .parallax-bg { background-attachment: scroll; } }
+
+.zoom-img { transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.group:hover .zoom-img { transform: scale(1.07); }
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float-y { animation: float-y 4s ease-in-out infinite; }

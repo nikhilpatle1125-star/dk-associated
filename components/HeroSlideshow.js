@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
-const INTERVAL = 5500;
+const INTERVAL = 3000;
 
 export default function HeroSlideshow({ slides, children }) {
   const [index, setIndex] = useState(0);
@@ -43,7 +43,7 @@ export default function HeroSlideshow({ slides, children }) {
 
   return (
     <section
-      className="relative border-b border-[var(--line)] overflow-hidden bg-[var(--forest)]"
+      className="relative border-b border-[var(--line)] overflow-hidden bg-[var(--forest)] h-[44vh] min-h-[240px] sm:h-[58vh] md:h-[76vh] md:max-h-[760px]"
       aria-roledescription="carousel"
       aria-label="Featured photos"
       onMouseEnter={() => setPaused(true)}
@@ -57,28 +57,22 @@ export default function HeroSlideshow({ slides, children }) {
         <div
           key={s.id}
           aria-hidden={i !== index}
-          className="absolute inset-0 transition-opacity duration-1000"
+          className="absolute inset-0 transition-opacity duration-700"
           style={{ opacity: i === index ? 1 : 0 }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={s.imageUrl}
             alt={s.title || ''}
-            className="h-full w-full object-cover"
+            className={`h-full w-full object-cover ${i === index ? 'kenburns' : ''}`}
             loading={i === 0 ? 'eager' : 'lazy'}
           />
         </div>
       ))}
-      <div
-        className="absolute inset-0"
-        style={{ background: 'linear-gradient(180deg, rgba(18,53,36,0.70), rgba(18,53,36,0.85))' }}
-        aria-hidden="true"
-      />
-
-      <div className="relative">{children}</div>
+      {children && <div className="relative">{children}</div>}
 
       {hasCaption && (
-        <div className="relative container-page pb-14 -mt-8 text-white/90 text-sm" aria-live="polite">
+        <div className="absolute left-3 bottom-12 sm:left-6 max-w-[85%] bg-black/55 px-4 py-2 text-white text-sm" aria-live="polite">
           {current.title && <span className="font-semibold">{current.title}</span>}
           {current.title && current.subtitle && <span className="mx-2">·</span>}
           {current.subtitle && <span>{current.subtitle}</span>}

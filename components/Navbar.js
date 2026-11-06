@@ -26,7 +26,7 @@ export default function Navbar({ settings }) {
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="hover:text-[var(--forest)] focus-ring">
+            <Link key={l.href} href={l.href} className="nav-link focus-ring">
               {l.label}
             </Link>
           ))}
